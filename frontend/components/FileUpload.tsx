@@ -1,10 +1,21 @@
 
-import React from 'react';
+
+import React, { useState } from 'react';
 import axiosInstance from '../utils/axiosInstance'; 
 
 const FileUpload: React.FC = () => {
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const [fileName, setFileName] = useState<string>('');
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+    if (file) {
+      setFileName(file.name);
+    }
+  };
+
+  const handleFileUpload = async () => {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    const file = fileInput?.files?.[0];
     if (!file) return;
 
     const formData = new FormData();
@@ -17,6 +28,8 @@ const FileUpload: React.FC = () => {
         },
       });
       console.log('File uploaded successfully', response.data);
+      setFileName(''); // Clear the file name after upload
+      fileInput.value = ''; // Clear the file input after upload
     } catch (error) {
       console.error('Error uploading file', error);
     }
@@ -24,7 +37,16 @@ const FileUpload: React.FC = () => {
 
   return (
     <div>
-      <input type="file" onChange={handleFileUpload} />
+      <input
+        id="fileInput"
+        type="file"
+        onChange={handleFileChange}
+        accept="*/*"
+      />
+      <button onClick={handleFileUpload} disabled={!fileName}>
+        Upload
+      </button>
+      {fileName && <p>Selected file: {fileName}</p>}
     </div>
   );
 };
