@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import axiosInstance from '../utils/axiosInstance'; 
 
@@ -22,12 +20,11 @@ const FileUpload: React.FC = () => {
     formData.append('file', file);
 
     try {
-      const response = await axiosInstance.post('/upload', formData, {
+      await axiosInstance.post('/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('File uploaded successfully', response.data);
       setFileName(''); // Clear the file name after upload
       fileInput.value = ''; // Clear the file input after upload
     } catch (error) {

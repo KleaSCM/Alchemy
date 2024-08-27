@@ -1,21 +1,28 @@
 
 .fileListContainer {
-  margin-top: 20px;
+  background-color: #fff4f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(255, 105, 180, 0.2);
+}
+
+.title {
+  color: #ff6f61;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.fileList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fileItem {
+  background-color: #fff;
   padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-
-  h2 {
-    margin-bottom: 10px;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-
-    li {
-      padding: 5px 0;
-      border-bottom: 1px solid #ddd;
-    }
-  }
+  border: 1px solid #ff6f61;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  color: #333;
 }
