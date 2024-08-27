@@ -20,6 +20,19 @@ const FileList: React.FC = () => {
       }
     };
 
+    fetchFiles();
+  }, []);
 
+  return (
+    <div className={styles.fileListContainer}>
+      <h2>Uploaded Files</h2>
+      <ul>
+        {files.map((file) => (
+          <li key={file.name}>{file.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default FileList;
