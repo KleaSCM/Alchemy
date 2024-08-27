@@ -1,0 +1,21 @@
+
+.fileListContainer {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+
+    li {
+      padding: 5px 0;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+}
