@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -9,65 +9,35 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// UploadFile handles file uploads
+const uploadDir = "./uploads"
+
+func init() {
+	if err := os.MkdirAll(uploadDir, os.ModePerm); err != nil {
+		panic(err)
+	}
+}
+
 func UploadFile(c *gin.Context) {
-	file, err := c.FormFile("file")
+	file, _, err := c.Request.FormFile("file")
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid file upload request"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to upload file"})
 		return
 	}
+	defer file.Close()
 
-	err = c.SaveUploadedFile(file, filepath.Join("uploads", file.Filename))
+	// Save file to disk
+	filePath := filepath.Join(uploadDir, "uploaded_file")
+	out, err := os.Create(filePath)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to upload file"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
+		return
+	}
+	defer out.Close()
+
+	if _, err := io.Copy(out, file); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "File uploaded successfully"})
-}
-
-// DeleteFile handles file deletions
-func DeleteFile(c *gin.Context) {
-	filename := c.Param("filename")
-	err := os.Remove(filepath.Join("uploads", filename))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete file"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"message": "File deleted successfully"})
-}
-
-// ListFiles lists all files in the uploads directory
-func ListFiles(c *gin.Context) {
-	files, err := ioutil.ReadDir("uploads")
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to list files"})
-		return
-	}
-
-	var fileList []string
-	for _, file := range files {
-		fileList = append(fileList, file.Name())
-	}
-
-	c.JSON(http.StatusOK, gin.H{"files": fileList})
-}
-
-// GetFileMetadataHandler retrieves metadata for a specific file
-func GetFileMetadataHandler(c *gin.Context) {
-	filename := c.Param("filename")
-	fileInfo, err := os.Stat(filepath.Join("uploads", filename))
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve file metadata"})
-		return
-	}
-
-	metadata := gin.H{
-		"name":    fileInfo.Name(),
-		"size":    fileInfo.Size(),
-		"modTime": fileInfo.ModTime(),
-	}
-
-	c.JSON(http.StatusOK, gin.H{"metadata": metadata})
 }
