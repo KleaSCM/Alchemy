@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@wasm-tool/wasm-pack-plugin": "^1.7.0",
     "axios": "^1.7.5",
+    "file-loader": "^6.2.0",
     "next": "14.2.6",
     "react": "^18",
     "react-dom": "^18",

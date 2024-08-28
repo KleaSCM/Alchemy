@@ -11,7 +11,7 @@ type FileMetadata struct {
 	ModTime time.Time `json:"mod_time"`
 }
 
-// GetFileMetadata retrieves metadata for a file
+// Retrieve file metadata
 func GetFileMetadata(filePath string) (FileMetadata, error) {
 	fileInfo, err := os.Stat(filePath)
 	if err != nil {

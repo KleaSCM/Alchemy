@@ -1,9 +1,0 @@
-[package]
-name = "Alchemy"  # Replace with your project name
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-actix-web = "4"       # Actix-web framework for building web servers
-sha2 = "0.10"         # SHA256 hashing implementation
-hex = "0.4"           # Hex encoding for hashed data
